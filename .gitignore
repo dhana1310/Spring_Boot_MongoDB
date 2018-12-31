@@ -1,0 +1,11 @@
+.mvn
+
+target
+
+.idea
+
+mvnw*
+
+target
+
+ws_mongodb_example.iml
