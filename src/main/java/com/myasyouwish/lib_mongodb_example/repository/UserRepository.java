@@ -6,11 +6,13 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface UserRepository extends MongoRepository<User, Integer> {
+public interface UserRepository extends MongoRepository<User, String> {
 
-    @Query("{company:'?0'}")
+    @Query("{company:{ $regex: ?0, $options: 'i' }}")
     List<User> fetchUserByCompany(String company);
 
     @Query("{name: { $regex: ?0, $options: 'i' }}")     //$regex contains the string, $options = 'i' searches case insensitive
     List<User> findUserByMatchingName(String name);
+
+    List<User> findByCompanyContainingIgnoreCase(String company);
 }

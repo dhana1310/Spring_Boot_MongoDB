@@ -12,15 +12,15 @@ import java.util.Optional;
 @AllArgsConstructor
 public class MongoDBService {
 
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     public List<User> fetchAllUserDetail() {
         return userRepository.findAll();
     }
 
-    public User fetchUserDetail(Integer userId) {
+    public User fetchUserDetail(String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
-        return userOptional.isPresent() ? userOptional.get() : null;
+        return userOptional.orElse(null);
     }
 
     public List<User> fetchUserDetailByCompany(String company) {
@@ -31,6 +31,10 @@ public class MongoDBService {
         return userRepository.findUserByMatchingName(name);
     }
 
+    public List<User> findUserByMatchingCompany(String name) {
+        return userRepository.findByCompanyContainingIgnoreCase(name);
+    }
+
     public User saveUserDetails(User user) {
         return userRepository.save(user);
     }
@@ -39,7 +43,7 @@ public class MongoDBService {
         return userRepository.save(user);
     }
 
-    public void deleteUser(Integer userId) {
+    public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
 }

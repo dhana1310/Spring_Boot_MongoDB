@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class MongoDBController {
 
-    private final MongoDBService mongoDBService;
+    private MongoDBService mongoDBService;
 
     @GetMapping(value = "/fetchAllUsers")
     public ResponseEntity<List<User>> fetchAllUsers() {
@@ -25,7 +25,7 @@ public class MongoDBController {
     }
 
     @GetMapping(value = "/fetchUser/{userId}")
-    public ResponseEntity<User> fetchUserById(@PathVariable("userId") Integer userId) {
+    public ResponseEntity<User> fetchUserById(@PathVariable("userId") String userId) {
 
         return Optional.ofNullable(mongoDBService.fetchUserDetail(userId)).map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
@@ -44,6 +44,13 @@ public class MongoDBController {
         return CollectionUtils.isEmpty(userList) ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/fetchAllUsersByCompanyMatching/{company}")
+    public ResponseEntity<List<User>> findUserByMatchingCompany(@PathVariable("company") String company) {
+
+        List<User> userList = mongoDBService.findUserByMatchingCompany(company);
+        return CollectionUtils.isEmpty(userList) ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
     @PostMapping("/saveUser")
     public ResponseEntity<User> saveUserData(@RequestBody User user) {
 
@@ -57,7 +64,7 @@ public class MongoDBController {
     }
 
     @DeleteMapping("/deleteUser/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable("userId") Integer userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable("userId") String userId) {
         mongoDBService.deleteUser(userId);
         return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
     }

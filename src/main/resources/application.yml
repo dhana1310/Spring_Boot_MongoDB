@@ -1,0 +1,10 @@
+#mongodb
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: database_test
+
+server:
+  port: 8086

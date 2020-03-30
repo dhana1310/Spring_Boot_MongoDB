@@ -7,10 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document(collection = "collection_user")
+@AllArgsConstructor
 public class User {
 
     @Id
-    private Integer id;
+    private String id;
     private String name;
     private Integer age;
     private String company;
